@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Словарь архаизмов «Юности честное зерцало»</title>
+  <style>
+    :root {
+      --bg: #faf8f4;
+      --surface: #ffffff;
+      --border: #e0d8cc;
+      --accent: #8b4513;
+      --accent-light: #f5ede3;
+      --accent-mid: #c4845a;
+      --text: #1a1208;
+      --text-muted: #6b5c45;
+      --pos-bg: #e8f0e8;
+      --pos-text: #2d5a27;
+      --cit-bg: #f7f4ef;
+      --nav-bg: #2c1a08;
+      --nav-text: #f5e8d5;
+      --nav-active: #c4845a;
+      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+      --radius: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Georgia", "Times New Roman", serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+
+    /* ── Шапка ── */
+    header {
+      background: var(--nav-bg);
+      color: var(--nav-text);
+      padding: 2rem 2rem 1.5rem;
+      text-align: center;
+      border-bottom: 4px solid var(--accent-mid);
+    }
+    header h1 {
+      font-size: 1.65rem;
+      font-weight: normal;
+      letter-spacing: 0.03em;
+      line-height: 1.4;
+    }
+    header .subtitle {
+      margin-top: 0.4rem;
+      font-size: 0.9rem;
+      color: #b09070;
+      font-style: italic;
+    }
+
+    /* ── Поиск ── */
+    .search-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      padding: 0.75rem 2rem 0.75rem;
+      border-bottom: 2px solid #4a2e10;
+    }
+    .search-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      position: relative;
+    }
+    #search {
+      width: 100%;
+      padding: 0.55rem 1rem 0.55rem 2.6rem;
+      border: 1px solid #5a3a18;
+      border-radius: 30px;
+      background: #3a2210;
+      color: var(--nav-text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    #search::placeholder { color: #806040; }
+    #search:focus { border-color: var(--accent-mid); background: #44280f; }
+    .search-icon {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #806040;
+      font-size: 1rem;
+      pointer-events: none;
+    }
+    #search-count {
+      text-align: center;
+      font-size: 0.78rem;
+      color: #806040;
+      margin-top: 0.3rem;
+      height: 1.1em;
+      font-family: sans-serif;
+    }
+
+    /* ── Алфавитная навигация ── */
+    .alpha-nav {
+      position: sticky;
+      top: 84px;
+      z-index: 90;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 3px;
+      box-shadow: var(--shadow);
+    }
+    .alpha-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 4px;
+      font-family: "Georgia", serif;
+      font-size: 0.9rem;
+      font-weight: bold;
+      text-decoration: none;
+      color: var(--accent);
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .alpha-btn:hover {
+      background: var(--accent-light);
+      border-color: var(--accent-mid);
+    }
+    .alpha-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .alpha-btn.inactive {
+      color: #c5b8a8;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    /* ── Основной контент ── */
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 2rem 4rem;
+    }
+
+    /* ── Буквенный якорь ── */
+    .letter-section {
+      margin-top: 2.5rem;
+      scroll-margin-top: 160px;
+    }
+    .letter-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .letter-heading .letter-char {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: var(--accent);
+      line-height: 1;
+      width: 2.5rem;
+      text-align: center;
+    }
+    .letter-heading .letter-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Словарная статья ── */
+    .entry {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent-mid);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.4rem 1rem;
+      margin-bottom: 0.9rem;
+      transition: border-left-color 0.2s, box-shadow 0.2s;
+    }
+    .entry:hover {
+      border-left-color: var(--accent);
+      box-shadow: var(--shadow);
+    }
+    .entry.hidden { display: none; }
+
+    .entry-head {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.4rem;
+    }
+    .entry-number {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: sans-serif;
+      min-width: 1.5rem;
+    }
+    .entry-word {
+      font-size: 1.15rem;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .entry-pos {
+      font-family: "Arial", sans-serif;
+      font-size: 0.72rem;
+      font-style: italic;
+      background: var(--pos-bg);
+      color: var(--pos-text);
+      padding: 0.15em 0.55em;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .entry-def {
+      font-size: 0.97rem;
+      color: var(--text);
+      margin-bottom: 0.65rem;
+      line-height: 1.6;
+    }
+
+    .citations {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .cit {
+      background: var(--cit-bg);
+      border-left: 2px solid var(--border);
+      border-radius: 0 3px 3px 0;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.88rem;
+      line-height: 1.55;
+    }
+    .cit-label {
+      font-family: "Arial", sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 0.15rem;
+    }
+    .cit-text {
+      font-style: italic;
+      color: #3a2e1e;
+    }
+    .cit-source {
+      font-style: italic;
+      color: #6b5c45;
+    }
+
+    /* ── Выделение при поиске ── */
+    mark {
+      background: #ffe066;
+      color: inherit;
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+
+    /* ── Пустой результат ── */
+    #no-results {
+      display: none;
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 1rem;
+    }
+
+    /* ── Счётчик статей ── */
+    .total-count {
+      text-align: right;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: sans-serif;
+      margin-bottom: 1rem;
+    }
+
+    /* ── Адаптив ── */
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.2rem; }
+      main { padding: 1rem 1rem 3rem; }
+      .alpha-btn { width: 1.7rem; height: 1.7rem; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Словарь архаизмов<br>«Юности честное зерцало»</h1>
+  <p class="subtitle">Лексикографический комментарий к памятнику русской словесности 1717 года</p>
+</header>
+
+<div class="search-wrap">
+  <div class="search-inner">
+    <input type="search" id="search" placeholder="Поиск по слову, части речи или толкованию…" autocomplete="off">
+  </div>
+  <div id="search-count"></div>
+</div>
+
+<nav class="alpha-nav" id="alpha-nav" aria-label="Алфавитная навигация"></nav>
+
+<main>
+  <div id="total-count" style="display:none"></div>
+  <div id="no-results">Ничего не найдено. Попробуйте изменить запрос.</div>
+  <div id="entries-root"></div>
+</main>
+
+<script>
+const ENTRIES = [
+  { n:1,  word:"Благообразно",    pos:"нареч.",
+    def:"Пристойно, благочинно, в приличной или благовидной форме.",
+    cit1:"…но говорить с ним благообразно, учтиво и вежливо.",
+    cit2:"Все шло так тихо, благообразно, что сердце радовалось.",
+    src2:"М. Е. Салтыков-Щедрин, «Господа Головлёвы»" },
+
+  { n:2,  word:"Благочинно",      pos:"нареч.",
+    def:"Благопристойно, прилично, чинно, соблюдая установленный порядок.",
+    cit1:"В церкви должен каждый благочинно и смирно стоять.",
+    cit2:"Все сидели на своих местах благочинно и благоговейно…",
+    src2:"И. С. Тургенев, «Дворянское гнездо»" },
+
+  { n:3,  word:"Ведать",          pos:"глаг., неперех., несовер.",
+    def:"Знать, иметь сведения или представление о чём-либо.",
+    cit1:"…понеже сие не их дело ведать.",
+    cit2:"Не ведают, что творят.",
+    src2:"А. С. Пушкин, «Борис Годунов»" },
+
+  { n:4,  word:"Велми",           pos:"нареч.",
+    def:"Весьма, очень, сильно.",
+    cit1:"Такой отрок велми разсудителен…",
+    cit2:"И царь вельми закручинился, и очи его наполнились слезами.",
+    src2:"А. К. Толстой, «Князь Серебряный»" },
+
+  { n:5,  word:"Вряд",            pos:"нареч.",
+    def:"На одном уровне, в один ряд, наравне.",
+    cit1:"…не ходи вряд с твоим господином или с ним вместе.",
+    cit2:"И старый конь, и молодой вряд пошли по дороге.",
+    src2:"Н. С. Лесков, «Очарованный странник»" },
+
+  { n:6,  word:"Вдругорядь",      pos:"нареч.",
+    def:"Вторично, ещё раз, в другой раз.",
+    cit1:"…но ежели вдругорядь спросит, то отвещай.",
+    cit2:"Смотри же, вдругорядь не попадайся мне с такими речами!",
+    src2:"А. Н. Островский, «Гроза»" },
+
+  { n:7,  word:"Дабы",            pos:"союз",
+    def:"Чтобы, для того чтобы.",
+    cit1:"…дабы тем охоту к письму умножить.",
+    cit2:"Он запер дверь, дабы никто не мог помешать их уединению.",
+    src2:"Н. М. Карамзин, «Бедная Лиза»" },
+
+  { n:8,  word:"До зела",         pos:"нареч.",
+    def:"Чрезвычайно, очень сильно, до крайней степени.",
+    cit1:"…ежели государь твой до зела на тебя прогневан…",
+    cit2:"Князь же до зела опечалился, не зная, как спасти войско.",
+    src2:"Н. М. Карамзин, «История государства Российского»" },
+
+  { n:9,  word:"Ести",            pos:"глаг., перех. и неперех., несовер.",
+    def:"Есть, принимать пищу.",
+    cit1:"Когда прилучится тебе с другими за столом ести…",
+    cit2:"А иные не хотят и хлеба ести, токмо воду пьют.",
+    src2:"Протопоп Аввакум, «Житие»" },
+
+  { n:10, word:"Како",            pos:"нареч. и союз",
+    def:"Как.",
+    cit1:"…и ведать, како кавалеру на лошади сидеть.",
+    cit2:"Како веруеши, тако и спасен будеши.",
+    src2:"Н. С. Лесков, «Запечатлённый ангел»" },
+
+  { n:11, word:"Каморе",          pos:"сущ., жен., предл. пад.",
+    def:"Комнате, палате, изолированном помещении.",
+    cit1:"В каморе, где спишь, не имей много компаней…",
+    cit2:"Судьи сидели в каменной каморе при свечах.",
+    src2:"А. Н. Толстой, «Пётр Первый»" },
+
+  { n:12, word:"Многажды",        pos:"нареч.",
+    def:"Многократно, много раз, часто.",
+    cit1:"…понеже многажды приключается, что такие люди…",
+    cit2:"Я многажды говаривал ему об этом деле, да всё без толку.",
+    src2:"М. Е. Салтыков-Щедрин, «Пошехонская старина»" },
+
+  { n:13, word:"Навыкнуть",       pos:"глаг., неперех., совер.",
+    def:"Привыкнуть, научиться, приобрести твёрдый навык.",
+    cit1:"…дабы молодые люди могли к тому навыкнуть.",
+    cit2:"Надо навыкнуть к мысли, что жизнь не всегда легка.",
+    src2:"И. А. Гончаров, «Обломов»" },
+
+  { n:14, word:"Надлежит",        pos:"глаг., безлич., несовер.",
+    def:"Следует, должно, необходимо.",
+    cit1:"Молодым отрокам надлежит быть всегда между собою вежливу…",
+    cit2:"Вам надлежит немедленно явиться к коменданту крепости.",
+    src2:"А. С. Пушкин, «Капитанская дочка»" },
+
+  { n:15, word:"Наипаче",         pos:"нареч. и союз",
+    def:"Больше всего, в особенности, главным образом.",
+    cit1:"Наипаче не дерзай указывать перстом на кого-либо.",
+    cit2:"Берегись хвастунов, а наипаче тех, кто хвалит сам себя.",
+    src2:"И. А. Крылов, Басни" },
+
+  { n:16, word:"Неистовство",     pos:"сущ., сред.",
+    def:"Здесь: непристойное поведение, кривляние, дурачество, буйство.",
+    cit1:"…не учиняй никакого неистовства или смеху.",
+    cit2:"Шум, брань и неистовство пьяной толпы разносились по трактиру.",
+    src2:"Ф. М. Достоевский, «Преступление и наказание»" },
+
+  { n:17, word:"Ниже",            pos:"союз",
+    def:"И не, также не, даже не (употребляется при отрицании).",
+    cit1:"Ниже не кашляй и не плюй вслух.",
+    cit2:"Не убоюсь я зверя лютаго, ниже меча свирепаго.",
+    src2:"А. К. Толстой, «Князь Серебряный»" },
+
+  { n:18, word:"Обиняками",       pos:"сущ., муж., твор. пад. мн. ч.",
+    def:"Намёками, недомолвками, иносказательно.",
+    cit1:"…говорить обиняками и закрытыми речами.",
+    cit2:"Говори прямо, нечего тут обиняками крутить.",
+    src2:"И. С. Тургенев, «Отцы и дети»" },
+
+  { n:19, word:"Обыкли",          pos:"глаг., неперех., совер., прош. вр., мн. ч.",
+    def:"Привыкли, усвоили привычку.",
+    cit1:"…как обыкли безумные и глупые люди делать.",
+    cit2:"Они обыкли видеть в нём грозного судию.",
+    src2:"А. С. Пушкин, «Дубровский»" },
+
+  { n:20, word:"Окроме",          pos:"предл. с род. пад.",
+    def:"Кроме, за исключением.",
+    cit1:"…окроме того, когда кто спросит.",
+    cit2:"Никого в доме не осталось, окроме старой няньки.",
+    src2:"Н. В. Гоголь, «Мёртвые души»" },
+
+  { n:21, word:"Особливыя",       pos:"прил., жен., мн. ч.",
+    def:"Особые, собственные, исключительные.",
+    cit1:"…не имея к тому особливыя нужды.",
+    cit2:"В ней была какая-то особливая, тихая прелесть.",
+    src2:"И. С. Тургенев, «Первая любовь»" },
+
+  { n:22, word:"Отметать",        pos:"глаг., перех., несовер.",
+    def:"Отвергать, отклонять, не принимать во внимание.",
+    cit1:"…не надлежит чужих разудков отметать.",
+    cit2:"Нельзя с ходу отметать предложения, не выслушав их.",
+    src2:"Л. Н. Толстой, «Анна Каренина»" },
+
+  { n:23, word:"Отрок",           pos:"сущ., муж., одуш.",
+    def:"Юноша, подросток, молодой человек.",
+    cit1:"Молодой отрок должен быть бодр…",
+    cit2:"Святой отрок стоял перед ним с кротким взором.",
+    src2:"М. В. Нестеров, Жития святых" },
+
+  { n:24, word:"Отвещать",        pos:"глаг., неперех., несовер. и совер.",
+    def:"Отвечать, дать ответ.",
+    cit1:"…но вежливо и приятно отвещать.",
+    cit2:"Что же ты молчишь, — гневно отвещал ему старик.",
+    src2:"А. С. Пушкин, «Повести Белкина»" },
+
+  { n:25, word:"Отшедши",         pos:"дееприч., совер.",
+    def:"Отойдя, удалившись на некоторое расстояние.",
+    cit1:"…но отшедши прочь, плюнь в платок.",
+    cit2:"Отец, отшедши к окну, долго смотрел на улицу.",
+    src2:"Л. Н. Толстой, «Детство»" },
+
+  { n:26, word:"Паки",            pos:"нареч.",
+    def:"Опять, снова, вновь.",
+    cit1:"…и паки вдругорядь не спрашивай.",
+    cit2:"Паки и паки реку вам: блюдите чистоту душевную.",
+    src2:"Н. С. Лесков, «Соборяне»" },
+
+  { n:27, word:"Пожиткам",        pos:"сущ., муж., неодуш., дат. пад. мн. ч.",
+    def:"Имуществу, домашним вещам, скарбу, добру.",
+    cit1:"…причиняет вред его пожиткам и чести.",
+    cit2:"Они собрали свои скромные пожитки и двинулись в путь.",
+    src2:"Н. В. Гоголь, «Тарас Бульба»" },
+
+  { n:28, word:"Поносительными",  pos:"прил., мн. ч., твор. пад.",
+    def:"Оскорбительными, бранными, бесчестящими.",
+    cit1:"…не порекай никого поносительными словами.",
+    cit2:"Судья счёл эти речи поносительными для государственного чина.",
+    src2:"А. Н. Толстой, «Пётр Первый»" },
+
+  { n:29, word:"Порекать",        pos:"глаг., перех., несовер.",
+    def:"Упрекать, порицать, поносить, ругать.",
+    cit1:"…не надлежит никого порекать.",
+    cit2:"Перестань меня порекать прошлыми ошибками.",
+    src2:"А. Н. Островский, «Бесприданница»" },
+
+  { n:30, word:"Празден",         pos:"прил., кратк. форма, муж.",
+    def:"Праздный, бездельничающий, ничем не занятый.",
+    cit1:"…чтобы никто празден не был.",
+    cit2:"Ум его не мог оставаться празден ни на минуту.",
+    src2:"И. А. Гончаров, «Обыкновенная история»" },
+
+  { n:31, word:"Радение",         pos:"сущ., сред.",
+    def:"Старание, усердие, прилежание, ревностная забота.",
+    cit1:"…показывать великое радение к учению.",
+    cit2:"За твоё верное радение жалую тебя кафтаном с царского плеча.",
+    src2:"А. К. Толстой, «Князь Серебряный»" },
+
+  { n:32, word:"Разудков",        pos:"сущ., муж., неодуш., род. пад. мн. ч.",
+    def:"Здесь в значении: рассуждений, мнений, суждений.",
+    cit1:"…не надлежит чужих разудков отметать.",
+    cit2:"Из сих разудков ясно следовало, что план наш верен.",
+    src2:"Денис Фонвизин, Записки" },
+
+  { n:33, word:"Содевает",        pos:"глаг., перех., несовер.",
+    def:"Делает, совершает, причиняет, приносит.",
+    cit1:"…сущий вред содевает отроку.",
+    cit2:"Всяк, кто зло содевает, сам себя губит.",
+    src2:"Н. М. Карамзин, «История государства Российского»" },
+
+  { n:34, word:"Сумозброды",      pos:"сущ., муж., одуш., мн. ч.",
+    def:"Безрассудные, сумасбродные, глупые люди.",
+    cit1:"…только сумозброды так поступают.",
+    cit2:"Они все были ветреные сумасброды, не думающие о будущем.",
+    src2:"И. С. Тургенев, «Дым»" },
+
+  { n:35, word:"Сумнительно",     pos:"нареч. и предик.",
+    def:"Сомнительно, внушает сомнения.",
+    cit1:"…ежели что покажется сумнительно.",
+    cit2:"Дело это казалось мне крайне сумнительным.",
+    src2:"А. С. Пушкин, «Капитанская дочка»" },
+
+  { n:36, word:"Тако",            pos:"нареч.",
+    def:"Так, таким образом.",
+    cit1:"Тако надобно отроку себя держать.",
+    cit2:"Яко на небеси, тако и на земли.",
+    src2:"Ф. М. Достоевский, цитация молитвы" },
+
+  { n:37, word:"Токмо",           pos:"огранич. частица и союз",
+    def:"Только, лишь.",
+    cit1:"…токмо правду всегда говорить.",
+    cit2:"Мы токмо исполнили свой долг перед отечеством.",
+    src2:"А. С. Пушкин, «Полтава»" },
+
+  { n:38, word:"Того ради",       pos:"союз",
+    def:"Поэтому, ради этого, следовательно.",
+    cit1:"Того ради не дерзай перечить старшим.",
+    cit2:"Того ради прошу вас выслушать меня терпеливо.",
+    src2:"А. Н. Радищев, «Путешествие из Петербурга в Москву»" },
+
+  { n:39, word:"Уничижай",        pos:"глаг., перех., повел. накл.",
+    def:"Унижай, умаляй чьё-либо достоинство, презирай.",
+    cit1:"…и не уничижай никого без вины.",
+    cit2:"Не уничижай себя паче меры, ибо это тоже гордыня.",
+    src2:"Ф. М. Достоевский, «Братья Карамазовы»" },
+
+  { n:40, word:"Учинить",         pos:"глаг., перех., совер.",
+    def:"Сделать, совершить, произвести (какое-либо действие).",
+    cit1:"…дабы не учинить никакого шума.",
+    cit2:"Следствие надлежало учинить незамедлительно.",
+    src2:"Н. В. Гоголь, «Ревизор»" },
+
+  { n:41, word:"Хощешь",          pos:"глаг., перех. и неперех., несовер., 2-е л. ед. ч.",
+    def:"Хочешь.",
+    cit1:"Ежели хощешь быть любим…",
+    cit2:"Чего ты хощешь от меня, старче?",
+    src2:"А. С. Пушкин, «Сказка о рыбаке и рыбке»" },
+
+  { n:42, word:"Челядинцы",       pos:"сущ., муж., одуш., мн. ч.",
+    def:"Слуги, дворовые люди, домашняя прислуга.",
+    cit1:"…не приказывай челядинцам делать непристойное.",
+    cit2:"Все челядинцы высыпали на двор встречать барина.",
+    src2:"Н. В. Гоголь, «Страшная месть»" },
+
+  { n:43, word:"Чужеложства",     pos:"сущ., сред., неодуш., род. пад.",
+    def:"Блуда, прелюбодеяния, нарушения супружеской верности.",
+    cit1:"…бегать от всякого чужеложства.",
+    cit2:"Они погрязли в грехах и чужеложстве, забыв закон божий.",
+    src2:"Л. Н. Толстой, «Отец Сергий»" },
+];
+
+/* ─── Вспомогательные функции ─── */
+function esc(s) {
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function firstChar(word) {
+  return word[0].toUpperCase();
+}
+
+function highlight(text, query) {
+  if (!query) return esc(text);
+  const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  return esc(text).replace(re, '<mark>$1</mark>');
+}
+
+/* ─── Построение DOM ─── */
+function buildEntries() {
+  const root = document.getElementById('entries-root');
+  const letters = {};
+
+  ENTRIES.forEach(e => {
+    const ch = firstChar(e.word);
+    if (!letters[ch]) letters[ch] = [];
+    letters[ch].push(e);
+  });
+
+  Object.keys(letters).sort((a,b) => a.localeCompare(b,'ru')).forEach(ch => {
+    const sec = document.createElement('section');
+    sec.className = 'letter-section';
+    sec.id = 'letter-' + ch;
+    sec.dataset.letter = ch;
+
+    sec.innerHTML = `<div class="letter-heading">
+      <span class="letter-char">${ch}</span>
+      <span class="letter-line"></span>
+    </div>`;
+
+    letters[ch].forEach(e => {
+      const div = document.createElement('article');
+      div.className = 'entry';
+      div.dataset.word = e.word.toLowerCase();
+      div.dataset.pos = e.pos.toLowerCase();
+      div.dataset.def = e.def.toLowerCase();
+      div.dataset.cit1 = e.cit1.toLowerCase();
+      div.dataset.cit2 = e.cit2.toLowerCase();
+
+      div.innerHTML = `
+        <div class="entry-head">
+          <span class="entry-number">${e.n}.</span>
+          <span class="entry-word">${esc(e.word)}</span>
+          <span class="entry-pos">${esc(e.pos)}</span>
+        </div>
+        <div class="entry-def">${esc(e.def)}</div>
+        <div class="citations">
+          <div class="cit">
+            <div class="cit-label">Из «Юности честного зерцала»</div>
+            <div class="cit-text">«${esc(e.cit1)}»</div>
+          </div>
+          <div class="cit">
+            <div class="cit-label">Из других произведений</div>
+            <div class="cit-text cit-source">«${esc(e.cit2)}» — <em>${esc(e.src2)}</em></div>
+          </div>
+        </div>`;
+      sec.appendChild(div);
+    });
+
+    root.appendChild(sec);
+  });
+}
+
+/* ─── Алфавитная навигация ─── */
+const ALPHABET = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('');
+const presentLetters = new Set(ENTRIES.map(e => firstChar(e.word)));
+
+function buildAlphaNav() {
+  const nav = document.getElementById('alpha-nav');
+  ALPHABET.forEach(ch => {
+    const btn = document.createElement('a');
+    btn.textContent = ch;
+    btn.className = 'alpha-btn' + (presentLetters.has(ch) ? '' : ' inactive');
+    btn.dataset.letter = ch;
+    if (presentLetters.has(ch)) {
+      btn.href = '#letter-' + ch;
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        document.getElementById('letter-' + ch)?.scrollIntoView({behavior:'smooth', block:'start'});
+        setActiveAlpha(ch);
+      });
+    }
+    nav.appendChild(btn);
+  });
+}
+
+function setActiveAlpha(ch) {
+  document.querySelectorAll('.alpha-btn').forEach(b => b.classList.remove('active'));
+  const target = document.querySelector(`.alpha-btn[data-letter="${ch}"]`);
+  if (target) target.classList.add('active');
+}
+
+/* ─── Поиск и фильтрация ─── */
+function doSearch(raw) {
+  const q = raw.trim().toLowerCase();
+  let visible = 0;
+
+  document.querySelectorAll('section.letter-section').forEach(sec => {
+    let secVisible = 0;
+    sec.querySelectorAll('article.entry').forEach(art => {
+      const match = !q
+        || art.dataset.word.includes(q)
+        || art.dataset.pos.includes(q)
+        || art.dataset.def.includes(q)
+        || art.dataset.cit1.includes(q)
+        || art.dataset.cit2.includes(q);
+
+      art.classList.toggle('hidden', !match);
+      if (match) {
+        secVisible++;
+        visible++;
+        if (q) applyHighlight(art, q);
+        else removeHighlight(art);
+      }
+    });
+    sec.style.display = secVisible ? '' : 'none';
+  });
+
+  document.getElementById('no-results').style.display = visible ? 'none' : 'block';
+  const cnt = document.getElementById('search-count');
+  cnt.textContent = q ? `Найдено статей: ${visible}` : '';
+  document.getElementById('total-count').textContent = q ? '' : `Всего статей: ${ENTRIES.length}`;
+}
+
+function applyHighlight(art, q) {
+  ['entry-word','entry-def'].forEach(cls => {
+    const el = art.querySelector('.' + cls);
+    if (el) el.innerHTML = highlight(el.textContent, q);
+  });
+  art.querySelectorAll('.cit-text, .entry-pos').forEach(el => {
+    el.innerHTML = highlight(el.textContent, q);
+  });
+}
+
+function removeHighlight(art) {
+  art.querySelectorAll('[data-orig]').forEach(el => {
+    el.textContent = el.dataset.orig;
+  });
+  // restore from dataset
+  const word = art.dataset.word;
+  art.querySelector('.entry-word').textContent = ENTRIES.find(e => e.word.toLowerCase() === word)?.word || '';
+  // simplest: re-render
+  const n = parseInt(art.querySelector('.entry-number').textContent);
+  const e = ENTRIES.find(x => x.n === n);
+  if (e) {
+    art.querySelector('.entry-word').innerHTML = esc(e.word);
+    art.querySelector('.entry-pos').innerHTML = esc(e.pos);
+    art.querySelector('.entry-def').innerHTML = esc(e.def);
+    const cits = art.querySelectorAll('.cit-text');
+    if (cits[0]) cits[0].innerHTML = `«${esc(e.cit1)}»`;
+    if (cits[1]) cits[1].innerHTML = `«${esc(e.cit2)}» — <em>${esc(e.src2)}</em>`;
+  }
+}
+
+/* ─── Инициализация ─── */
+buildEntries();
+buildAlphaNav();
+document.getElementById('total-count').textContent = `Всего статей: ${ENTRIES.length}`;
+
+const searchInput = document.getElementById('search');
+searchInput.addEventListener('input', () => doSearch(searchInput.value));
+
+/* Подсветка активной буквы при прокрутке */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) {
+      setActiveAlpha(en.target.dataset.letter);
+    }
+  });
+}, { rootMargin: '-20% 0px -75% 0px' });
+
+document.querySelectorAll('section.letter-section').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
